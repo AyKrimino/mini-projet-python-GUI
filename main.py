@@ -340,7 +340,7 @@ def main() -> None:
     )
     afficher_tous_button = tk.Button(
         frame5,
-        text='Afficher tous',
+        text='Afficher tous les contacts',
         command=afficher_tous,
     )
     switch_theme_button = tk.Button(
@@ -377,6 +377,67 @@ def main() -> None:
     )
     
     frame5.pack()
+    
+    # Menubar section
+    menu_bar = tk.Menu(
+        window,
+    )
+    
+    # File menu
+    file_menu = tk.Menu(
+        menu_bar,
+        tearoff=0,
+    )
+    file_menu.add_command(
+        label='Vider l\'annuaire',
+        command=vider_annuaire,
+    )
+    file_menu.add_separator()
+    file_menu.add_command(
+        label='Quitter',
+        command=exit,
+    )
+    
+    # Action menu
+    action_menu = tk.Menu(
+        menu_bar,
+        tearoff=0
+    )
+    action_menu.add_command(
+        label='Afficher tous les contact',
+        command=afficher_tous,
+    )
+    
+    # Theme menu
+    theme_menu = tk.Menu(
+        menu_bar,
+        tearoff=0,
+    )
+    theme_menu.add_command(
+        label='Dark theme',
+        command=lambda: switch_theme(theme='DARK'),
+    )
+    theme_menu.add_command(
+        label='Light theme',
+        command=lambda: switch_theme(theme='LIGHT'),
+    )
+    
+    menu_bar.add_cascade(
+        menu=file_menu,
+        label='File',
+    )
+    menu_bar.add_cascade(
+        menu=action_menu,
+        label='Action',
+    )
+    menu_bar.add_cascade(
+        menu=theme_menu,
+        label='Theme',
+    )
+    
+    window.config(
+        menu=menu_bar,
+    )
     
     window.mainloop()
 
