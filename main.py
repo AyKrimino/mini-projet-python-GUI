@@ -15,6 +15,10 @@ def supprimer():
     pass
 
 
+def afficher():
+    pass
+
+
 def main() -> None:
     window = tk.Tk()
     window.title('Csv helper')
@@ -235,6 +239,70 @@ def main() -> None:
     )
     
     frame3.pack()
+    
+    # Frame4 section
+    frame4 = tk.Frame(
+        window,
+    )
+    
+    # Frame4 widgets
+    afficher_label = tk.Label(
+        frame4,
+        text='Afficher',
+    )
+    nom_contact_afficher_label = tk.Label(
+        frame4,
+        text='Nom du contact à afficher',
+    )
+    nom_contact_afficher_entry = tk.Entry(
+        frame4,
+    )
+    afficher_button = tk.Button(
+        frame4,
+        text='Afficher',
+        command=afficher,
+    )
+    affichage_listvar = tk.StringVar(value=[])
+    affichage_listbox = tk.Listbox(
+        frame4,
+        listvariable=affichage_listvar,
+        height=10,
+        width=75,
+        selectmode='extended',
+    )
+    horizontal_line4 = ttk.Separator(
+        frame4,
+        orient='horizontal',
+    )
+    
+    # Geometry managers for Frame4
+    afficher_label.grid(
+        row=1,
+        column=0,
+    )
+    nom_contact_afficher_label.grid(
+        row=0,
+        column=1,
+    )
+    nom_contact_afficher_entry.grid(
+        row=1,
+        column=1,
+    )
+    afficher_button.grid(
+        row=1,
+        column=2,
+    )
+    affichage_listbox.grid(
+        row=2,
+        columnspan=4,
+    )
+    horizontal_line4.grid(
+        row=3,
+        columnspan=4,
+        sticky='ew',
+    )
+    
+    frame4.pack()
     
     window.mainloop()
 
