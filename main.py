@@ -11,6 +11,10 @@ def modifier():
     pass
 
 
+def supprimer():
+    pass
+
+
 def main() -> None:
     window = tk.Tk()
     window.title('Csv helper')
@@ -179,6 +183,58 @@ def main() -> None:
     )
     
     frame2.pack()
+    
+    # Frame3 section
+    frame3 = tk.Frame(
+        window,
+    )
+    
+    # Frame3 widgets
+    supprimer_label = tk.Label(
+        frame3,
+        text='Supprimer',
+    )
+    nom_contact_supprimer_label = tk.Label(
+        frame3,
+        text='Nom du contact à supprimer',
+    )
+    nom_contact_supprimer_entry = tk.Entry(
+        frame3,
+    )
+    supprimer_button = tk.Button(
+        frame3,
+        text='Supprimer',
+        command=supprimer,
+    )
+    horizontal_line3 = ttk.Separator(
+        frame3,
+        orient='horizontal',
+    )
+    
+    # Geometry managers for Frame3
+    supprimer_label.grid(
+        row=1,
+        column=0,
+    )
+    nom_contact_supprimer_label.grid(
+        row=0,
+        column=1,
+    )
+    nom_contact_supprimer_entry.grid(
+        row=1,
+        column=1,
+    )
+    supprimer_button.grid(
+        row=1,
+        column=3,
+    )
+    horizontal_line3.grid(
+        row=2,
+        columnspan=4,
+        sticky='ew',
+    )
+    
+    frame3.pack()
     
     window.mainloop()
 
