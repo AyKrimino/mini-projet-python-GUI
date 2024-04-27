@@ -6,14 +6,12 @@ from constants import *
 
 
 def is_valid(nom=None, mail=None, tel=None):
-    print(nom, mail, tel)
     valid = True
     if nom:
         valid = (
             nom.isalnum() and 
             len(nom) <= 30
         )
-        print(valid)
     if valid and mail:
         if '@' not in mail:
             return False
@@ -25,14 +23,27 @@ def is_valid(nom=None, mail=None, tel=None):
             ' ' not in nom_mail and
             part2_mail == 'isi.utm.tn'
         )  
-        print(valid)
     if valid and tel:
         valid = (
             len(tel) == 6 and 
             tel.isdigit()
         )
-        print(valid)
     return valid
+
+
+def exist(nom=None, mail=None, tel=None):
+    with open('data.csv') as f:
+        contacts_reader = csv.DictReader(f)
+        
+        for contact in contacts_reader:
+            if (
+                (nom and contact['nom'] == nom) or 
+                (mail and contact['email'] == mail) or 
+                (tel and contact['telephone'] == tel)
+            ):
+                print('data already exists')
+                return True
+    return False
     
 
 def ajouter():
@@ -52,13 +63,9 @@ def ajouter():
         return
     
     # check that they doesn't exist in data.csv
-    with open('data.csv') as f:
-        contacts_reader = csv.DictReader(f)
-        
-        for contact in contacts_reader:
-            if contact['nom'] == 'nom' or contact['email'] == mail or contact['telephone'] == tel:
-                print('data already exists')
-                return
+    if exist(nom, mail, tel):
+        return
+
     
     # append data provided by the user to the data.csv file
     with open('data.csv', 'a') as f:
@@ -68,8 +75,40 @@ def ajouter():
 
 
 def modifier():
-    pass
-
+    nom_contact_modifier = nom_contact_modifier_entry.get()
+    nouveau_mail = nouveau_mail_entry.get()
+    nouveau_nom = nouveau_nom_entry.get()
+    
+    found = False
+    contacts = []
+    
+    with open('data.csv') as f:
+        contacts = list(csv.DictReader(f, fieldnames=FIELDNAMES))
+        
+        for contact in contacts:
+            if contact['nom'] == nom_contact_modifier:
+                found = True
+                
+                if not nouveau_mail or not nouveau_nom or not is_valid(nouveau_nom, nouveau_mail):
+                    print('Data is invalid')
+                    return
+                
+                if exist(nouveau_nom, nouveau_mail):
+                    return
+                
+                contact['nom'] = nouveau_nom
+                contact['email'] = nouveau_mail
+                break
+        
+    if not found:
+        print('NON EXISTANT')
+        return
+        
+    with open('data.csv', 'w', newline='') as f:
+        contacts_writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
+        
+        contacts_writer.writerows(contacts)
+                
 
 def supprimer():
     pass
