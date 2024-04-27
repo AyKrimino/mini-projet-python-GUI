@@ -111,7 +111,34 @@ def modifier():
                 
 
 def supprimer():
-    pass
+    nom_contact_supprimer = nom_contact_supprimer_entry.get()
+    
+    if not nom_contact_supprimer:
+        print('invalid data')
+        return
+    
+    found = False
+    contacts = []
+    
+    with open('data.csv') as f:
+        contacts = list(csv.DictReader(f, fieldnames=FIELDNAMES))
+        
+        for contact in contacts:
+            if contact['nom'] == nom_contact_supprimer:
+                found = True
+
+                contacts.remove(contact)
+                
+                break
+    
+    if not found:
+        print('NON EXISTANT')
+        return
+    
+    with open('data.csv', 'w', newline='') as f:
+        contacts_writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
+        
+        contacts_writer.writerows(contacts)
 
 
 def afficher():
