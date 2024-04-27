@@ -1,10 +1,70 @@
 # importations
 import tkinter as tk
 from tkinter import ttk, messagebox
+import csv
+from constants import *
 
+
+def is_valid(nom=None, mail=None, tel=None):
+    print(nom, mail, tel)
+    valid = True
+    if nom:
+        valid = (
+            nom.isalnum() and 
+            len(nom) <= 30
+        )
+        print(valid)
+    if valid and mail:
+        if '@' not in mail:
+            return False
+        mail = mail.split('@')
+        nom_mail = mail[0]
+        part2_mail = mail[1]
+        valid = (
+            nom_mail.isalnum() and 
+            ' ' not in nom_mail and
+            part2_mail == 'isi.utm.tn'
+        )  
+        print(valid)
+    if valid and tel:
+        valid = (
+            len(tel) == 6 and 
+            tel.isdigit()
+        )
+        print(valid)
+    return valid
+    
 
 def ajouter():
-    pass
+    # get the input values provided by the user
+    nom = nom_entry.get()
+    mail = mail_entry.get()
+    tel = tel_entry.get()
+    
+    # check that all fields aren't empty
+    if not nom or not mail or not tel:
+        print('data should not be empty')
+        return
+    
+    # check constraints
+    if not is_valid(nom, mail, tel):
+        print('data is invalid')
+        return
+    
+    # check that they doesn't exist in data.csv
+    with open('data.csv') as f:
+        contacts_reader = csv.DictReader(f)
+        
+        for contact in contacts_reader:
+            if contact['nom'] == 'nom' or contact['email'] == mail or contact['telephone'] == tel:
+                print('data already exists')
+                return
+    
+    # append data provided by the user to the data.csv file
+    with open('data.csv', 'a') as f:
+        contact_writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
+        
+        contact_writer.writerow({'nom': nom, 'email':mail, 'telephone': tel})
 
 
 def modifier():
@@ -31,11 +91,11 @@ def afficher_tous():
     pass
 
 
-def switch_theme():
+def switch_theme(*args, **kwargs):
     pass
 
 
-def main() -> None:
+if __name__ == '__main__':
     window = tk.Tk()
     window.title('Csv helper')
     window.geometry('800x640')
@@ -440,7 +500,4 @@ def main() -> None:
     )
     
     window.mainloop()
-
-
-if __name__ == '__main__':
-    main()
+    

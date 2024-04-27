@@ -1,0 +1,5 @@
+FIELDNAMES = [
+    'nom',
+    'email',
+    'telephone',
+]
