@@ -19,10 +19,28 @@ def afficher():
     pass
 
 
+def vider_annuaire():
+    pass
+
+
+def reinitialiser_champs():
+    pass
+
+
+def afficher_tous():
+    pass
+
+
+def switch_theme():
+    pass
+
+
 def main() -> None:
     window = tk.Tk()
     window.title('Csv helper')
     window.geometry('800x640')
+    
+    is_dark_mode = False
     
     # Frame1 section
     frame1 = tk.Frame(
@@ -303,6 +321,62 @@ def main() -> None:
     )
     
     frame4.pack()
+    
+    # Frame5 section
+    frame5 = tk.Frame(
+        window,
+    )
+    
+    # Frame5 widgets
+    vider_annuaire_button = tk.Button(
+        frame5,
+        text='Vider l\'annuaire',
+        command=vider_annuaire,
+    )
+    reinitialiser_champs_button = tk.Button(
+        frame5,
+        text='Réinitialiser les champs',
+        command=reinitialiser_champs,
+    )
+    afficher_tous_button = tk.Button(
+        frame5,
+        text='Afficher tous',
+        command=afficher_tous,
+    )
+    switch_theme_button = tk.Button(
+        frame5,
+        text='Light mode' if is_dark_mode else 'Dark mode',
+        command=switch_theme,
+    )
+    quitter_button = tk.Button(
+        frame5,
+        text='Quitter',
+        command=exit,
+    )
+    
+    # Geometry managers for Frame5
+    vider_annuaire_button.grid(
+        row=0,
+        column=0,
+    )
+    reinitialiser_champs_button.grid(
+        row=0,
+        column=1,
+    )
+    afficher_tous_button.grid(
+        row=0,
+        column=2,
+    )
+    switch_theme_button.grid(
+        row=0,
+        column=3,
+    )
+    quitter_button.grid(
+        row=0,
+        column=4,
+    )
+    
+    frame5.pack()
     
     window.mainloop()
 
