@@ -208,16 +208,42 @@ def afficher_tous():
             affichage_textbox.config(state='disabled')
 
 
-def switch_theme(*args, **kwargs):
-    pass
+def switch_theme():
+    global is_dark_mode
+    is_dark_mode = not is_dark_mode
+    
+    theme = LIGHT_MODE
+    if is_dark_mode:
+        switch_theme_button.config(text='Toggle light mode')
+        theme = DARK_MODE
+        
+    window.config(bg=theme['bg'])
+    
+    for widget1 in window.winfo_children():
+        widget1.config(bg=theme['bg'])
+        print(widget1.winfo_class())
+        for widget2 in widget1.winfo_children():
+            widget_type = widget2.winfo_class()
+            
+            # print(widget_type)
+            
+            if widget_type == 'Label':
+                widget2.config(bg=theme['bg'], fg=theme['fg'])
+            elif widget_type == 'Entry' or widget_type == 'Text':
+                widget2.config(bg=theme['entry_bg'], fg=theme['entry_fg'], insertbackground=theme['fg'])
+            elif widget_type == 'Button':
+                widget2.config(bg=theme['btn_bg'], fg=theme['btn_fg'])
+            elif widget_type == 'Menu':
+                widget2.config(bg=theme['bg'], fg=theme['fg'])
+
+
+is_dark_mode = False
 
 
 if __name__ == '__main__':
     window = tk.Tk()
     window.title('Csv helper')
     window.geometry('800x640')
-    
-    is_dark_mode = False
     
     # Frame1 section
     frame1 = tk.Frame(
@@ -228,32 +254,40 @@ if __name__ == '__main__':
     ajout_contact_label = tk.Label(
         frame1,
         text='Ajout d\'un contact',
+        font=FONT,
     )
     nom_label = tk.Label(
         frame1,
         text='Nom',
+        font=FONT,
     )
     nom_entry = tk.Entry(
         frame1,
+        font=FONT,
     )
     mail_label = tk.Label(
         frame1,
         text='Mail',
+        font=FONT,
     )
     mail_entry = tk.Entry(
         frame1,
+        font=FONT,
     )
     tel_label = tk.Label(
         frame1,
         text='Tel',
+        font=FONT,
     )
     tel_entry = tk.Entry(
         frame1,
+        font=FONT,
     )
     ajouter_button = tk.Button(
         frame1,
         text='Ajouter',
         command=ajouter,
+        font=FONT,
     )
     horizontal_line1 = ttk.Separator(
         frame1,
@@ -262,38 +296,64 @@ if __name__ == '__main__':
     
     # Geometry manager for frame1 widgets
     ajout_contact_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1, 
         column=0,
     )
     nom_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=1,
     )
     nom_entry.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=1,
     )
     mail_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=2,
     )
     mail_entry.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=2,
     )
     tel_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=3,
     )
     tel_entry.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=3,
     )
     ajouter_button.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=2,
         column=3,
     )
     horizontal_line1.grid(
+        padx=10,
+        pady=5,
         row=3,
         columnspan=4,
         sticky='ew',
@@ -310,32 +370,40 @@ if __name__ == '__main__':
     modifier_label = tk.Label(
         frame2,
         text='Modifier',
+        font=FONT,
     )
     nom_contact_modifer_label = tk.Label(
         frame2,
         text='Nom du contact à modifier',
+        font=FONT,
     )
     nom_contact_modifier_entry = tk.Entry(
         frame2,
+        font=FONT,
     )
     nouveau_mail_label = tk.Label(
         frame2,
         text='Nouveau mail',
+        font=FONT,
     )
     nouveau_mail_entry = tk.Entry(
         frame2,
+        font=FONT,
     )
     nouveau_nom_label = tk.Label(
         frame2,
         text='Nouveau nom',
+        font=FONT,
     )
     nouveau_nom_entry = tk.Entry(
         frame2,
+        font=FONT,
     )
     modifier_button = tk.Button(
         frame2,
         text='Modifier',
         command=modifier,
+        font=FONT,
     )
     horizontal_line2 = ttk.Separator(
         frame2,
@@ -344,38 +412,64 @@ if __name__ == '__main__':
     
     # Geometry managers for frame2 widgets
     modifier_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=0,
     )
     nom_contact_modifer_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=1,
     )
     nom_contact_modifier_entry.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=1,
     )
     nouveau_mail_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=2,
         column=1,
     )
     nouveau_mail_entry.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=2,
         column=2,
     )
     nouveau_nom_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=3,
         column=1,
     )
     nouveau_nom_entry.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=3,
         column=2,
     )
     modifier_button.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=2,
         column=3,
     )
     horizontal_line2.grid(
+        padx=10,
+        pady=5,
         row=4,
         columnspan=4,
         sticky='ew',
@@ -392,18 +486,22 @@ if __name__ == '__main__':
     supprimer_label = tk.Label(
         frame3,
         text='Supprimer',
+        font=FONT,
     )
     nom_contact_supprimer_label = tk.Label(
         frame3,
         text='Nom du contact à supprimer',
+        font=FONT,
     )
     nom_contact_supprimer_entry = tk.Entry(
         frame3,
+        font=FONT,
     )
     supprimer_button = tk.Button(
         frame3,
         text='Supprimer',
         command=supprimer,
+        font=FONT,
     )
     horizontal_line3 = ttk.Separator(
         frame3,
@@ -412,22 +510,36 @@ if __name__ == '__main__':
     
     # Geometry managers for Frame3
     supprimer_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=0,
     )
     nom_contact_supprimer_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=1,
     )
     nom_contact_supprimer_entry.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=1,
     )
     supprimer_button.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=3,
     )
     horizontal_line3.grid(
+        padx=10,
+        pady=5,
         row=2,
         columnspan=4,
         sticky='ew',
@@ -444,23 +556,28 @@ if __name__ == '__main__':
     afficher_label = tk.Label(
         frame4,
         text='Afficher',
+        font=FONT,
     )
     nom_contact_afficher_label = tk.Label(
         frame4,
         text='Nom du contact à afficher',
+        font=FONT,
     )
     nom_contact_afficher_entry = tk.Entry(
         frame4,
+        font=FONT,
     )
     afficher_button = tk.Button(
         frame4,
         text='Afficher',
         command=afficher,
+        font=FONT,
     )
     affichage_textbox = tk.Text(
         frame4,
         height=10,
         width=75,
+        font=FONT,
     )
     horizontal_line4 = ttk.Separator(
         frame4,
@@ -469,26 +586,43 @@ if __name__ == '__main__':
     
     # Geometry managers for Frame4
     afficher_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=0,
     )
     nom_contact_afficher_label.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=1,
     )
     nom_contact_afficher_entry.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=1,
     )
     afficher_button.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=1,
         column=2,
     )
     affichage_textbox.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=2,
         columnspan=4,
     )
     horizontal_line4.grid(
+        padx=10,
+        pady=5,
         row=3,
         columnspan=4,
         sticky='ew',
@@ -508,46 +642,66 @@ if __name__ == '__main__':
         frame5,
         text='Vider l\'annuaire',
         command=vider_annuaire,
+        font=FONT,
     )
     reinitialiser_champs_button = tk.Button(
         frame5,
         text='Réinitialiser les champs',
         command=reinitialiser_champs,
+        font=FONT,
     )
     afficher_tous_button = tk.Button(
         frame5,
         text='Afficher tous les contacts',
         command=afficher_tous,
+        font=FONT,
     )
     switch_theme_button = tk.Button(
         frame5,
-        text='Light mode' if is_dark_mode else 'Dark mode',
+        text='Toggle dark mode',
         command=switch_theme,
+        font=FONT,
     )
     quitter_button = tk.Button(
         frame5,
         text='Quitter',
         command=exit,
+        font=FONT,
     )
     
     # Geometry managers for Frame5
     vider_annuaire_button.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=0,
     )
     reinitialiser_champs_button.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=1,
     )
     afficher_tous_button.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=2,
     )
     switch_theme_button.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=3,
     )
     quitter_button.grid(
+        padx=10,
+        pady=5,
+        sticky='news',
         row=0,
         column=4,
     )
@@ -591,11 +745,11 @@ if __name__ == '__main__':
     )
     theme_menu.add_command(
         label='Dark theme',
-        command=lambda: switch_theme(theme='DARK'),
+        command=switch_theme,
     )
     theme_menu.add_command(
         label='Light theme',
-        command=lambda: switch_theme(theme='LIGHT'),
+        command=switch_theme,
     )
     
     menu_bar.add_cascade(
