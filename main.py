@@ -191,7 +191,21 @@ def reinitialiser_champs():
 
 
 def afficher_tous():
-    pass
+    affichage_textbox.config(state='normal')
+    affichage_textbox.delete(1.0, 'end')
+    affichage_textbox.config(state='disabled')
+
+    with open('data.csv') as f:
+        contacts_reader = csv.DictReader(f, fieldnames=FIELDNAMES)
+        
+        contacts_reader.__next__()
+        
+        for idx, contact in enumerate(contacts_reader):
+            affichage_textbox.config(state='normal')
+
+            affichage_textbox.insert(f'{idx + 1}.0', f'Nom : {contact["nom"]}    Mail: {contact["email"]}    Tel: {contact["telephone"]}\n')
+            
+            affichage_textbox.config(state='disabled')
 
 
 def switch_theme(*args, **kwargs):
