@@ -1,1 +1,2 @@
-1.0
+
+            widget.delete(0, 'end')

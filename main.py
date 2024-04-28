@@ -142,15 +142,52 @@ def supprimer():
 
 
 def afficher():
-    pass
+    nom_contact_afficher = nom_contact_afficher_entry.get()
+    
+    if not nom_contact_afficher:
+        print('invalid data')
+        return
+    
+    found = False
+    
+    with open('data.csv') as f:
+        contacts = csv.DictReader(f, fieldnames=FIELDNAMES)
+        
+        for contact in contacts:
+            if contact['nom'] == nom_contact_afficher:
+                found = True
+                
+                affichage_textbox.config(state='normal')
+                
+                affichage_textbox.delete('1.0', 'end')
+                affichage_textbox.insert('1.0', f'Nom : {contact["nom"]}    Mail: {contact["email"]}    Tel: {contact["telephone"]}')
+                
+                affichage_textbox.config(state='disabled')
+                
+                break
+    
+    if not found:
+        print('NON EXISTANT')
 
 
 def vider_annuaire():
-    pass
+    with open('data.csv', 'w') as f:
+        pass
 
 
 def reinitialiser_champs():
-    pass
+    nom_entry.delete(0, 'end')
+    mail_entry.delete(0, 'end')
+    tel_entry.delete(0, 'end')
+    nom_contact_modifier_entry.delete(0, 'end')
+    nouveau_mail_entry.delete(0, 'end')
+    nouveau_nom_entry.delete(0, 'end')
+    nom_contact_supprimer_entry.delete(0, 'end')
+    nom_contact_afficher_entry.delete(0, 'end')
+    
+    affichage_textbox.config(state='normal')
+    affichage_textbox.delete(1.0, 'end')
+    affichage_textbox.config(state='disabled')
 
 
 def afficher_tous():
@@ -406,13 +443,10 @@ if __name__ == '__main__':
         text='Afficher',
         command=afficher,
     )
-    affichage_listvar = tk.StringVar(value=[])
-    affichage_listbox = tk.Listbox(
+    affichage_textbox = tk.Text(
         frame4,
-        listvariable=affichage_listvar,
         height=10,
         width=75,
-        selectmode='extended',
     )
     horizontal_line4 = ttk.Separator(
         frame4,
@@ -436,7 +470,7 @@ if __name__ == '__main__':
         row=1,
         column=2,
     )
-    affichage_listbox.grid(
+    affichage_textbox.grid(
         row=2,
         columnspan=4,
     )
@@ -445,6 +479,8 @@ if __name__ == '__main__':
         columnspan=4,
         sticky='ew',
     )
+    
+    affichage_textbox.config(state='disabled')  # force the user to not type on the text widget
     
     frame4.pack()
     
