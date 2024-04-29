@@ -34,10 +34,13 @@ def is_valid(nom=None, mail=None, tel=None):
 
 
 def exist(nom=None, mail=None, tel=None):
+    file_is_emty = 'yes'
+    
     with open('data.csv') as f:
         contacts_reader = csv.DictReader(f)
         
         for contact in contacts_reader:
+            file_is_emty = 'no'
             if (
                 (nom and contact['nom'] == nom) or 
                 (mail and contact['email'] == mail) or 
@@ -50,8 +53,8 @@ def exist(nom=None, mail=None, tel=None):
                     DARK_MODE if is_dark_mode else LIGHT_MODE,
                     FONT,
                 )
-                return True
-    return False
+                return True, file_is_emty
+    return False, file_is_emty
     
 
 def ajouter():
@@ -83,7 +86,8 @@ def ajouter():
         return
     
     # check that they doesn't exist in data.csv
-    if exist(nom, mail, tel):
+    data_exist, file_is_empty = exist(nom, mail, tel)
+    if data_exist:
         ShowMessage(
             window, 
             'Donées existante', 
@@ -94,8 +98,11 @@ def ajouter():
         return
 
     # append data provided by the user to the data.csv file
-    with open('data.csv', 'a') as f:
+    with open('data.csv', 'a', newline='') as f:
         contact_writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
+        
+        if file_is_empty == 'yes':
+            contact_writer.writeheader()
         
         contact_writer.writerow({'nom': nom, 'email':mail, 'telephone': tel})
 
@@ -241,7 +248,13 @@ def afficher():
 
 def vider_annuaire():
     with open('data.csv', 'w') as f:
-        pass
+        ShowMessage(
+            window,
+            'Données supprimées',
+            'Tous les données sont supprimées',
+            DARK_MODE if is_dark_mode else LIGHT_MODE,
+            FONT,
+        )
 
 
 def reinitialiser_champs():
@@ -811,11 +824,7 @@ if __name__ == '__main__':
         tearoff=0,
     )
     theme_menu.add_command(
-        label='Dark theme',
-        command=switch_theme,
-    )
-    theme_menu.add_command(
-        label='Light theme',
+        label='Switch theme',
         command=switch_theme,
     )
     
