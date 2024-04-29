@@ -1,8 +1,10 @@
 # importations
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 import csv
+
 from constants import *
+from custom_components import CustomMessageBox as ShowMessage
 
 
 def is_valid(nom=None, mail=None, tel=None):
@@ -41,7 +43,13 @@ def exist(nom=None, mail=None, tel=None):
                 (mail and contact['email'] == mail) or 
                 (tel and contact['telephone'] == tel)
             ):
-                print('data already exists')
+                ShowMessage(
+                    window, 
+                    'Donées existante', 
+                    'Données déja existe dans la base de données!', 
+                    DARK_MODE if is_dark_mode else LIGHT_MODE,
+                    FONT,
+                )
                 return True
     return False
     
@@ -54,19 +62,37 @@ def ajouter():
     
     # check that all fields aren't empty
     if not nom or not mail or not tel:
-        print('data should not be empty')
+        ShowMessage(
+            window, 
+            'Donées invalides', 
+            'Ces champs doivent être non vide!', 
+            DARK_MODE if is_dark_mode else LIGHT_MODE,
+            FONT,
+        )
         return
     
     # check constraints
     if not is_valid(nom, mail, tel):
-        print('data is invalid')
+        ShowMessage(
+            window, 
+            'Donées invalides', 
+            'Les contraintes de données ne sont pas respectées!', 
+            DARK_MODE if is_dark_mode else LIGHT_MODE,
+            FONT,
+        )
         return
     
     # check that they doesn't exist in data.csv
     if exist(nom, mail, tel):
+        ShowMessage(
+            window, 
+            'Donées existante', 
+            'Données déja existe dans la base de données!', 
+            DARK_MODE if is_dark_mode else LIGHT_MODE,
+            FONT,
+        )
         return
 
-    
     # append data provided by the user to the data.csv file
     with open('data.csv', 'a') as f:
         contact_writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
@@ -90,10 +116,23 @@ def modifier():
                 found = True
                 
                 if not nouveau_mail or not nouveau_nom or not is_valid(nouveau_nom, nouveau_mail):
-                    print('Data is invalid')
+                    ShowMessage(
+                        window, 
+                        'Donées invalides', 
+                        'Ces champs ne doivent pas être vide!', 
+                        DARK_MODE if is_dark_mode else LIGHT_MODE,
+                        FONT,
+                    )
                     return
                 
                 if exist(nouveau_nom, nouveau_mail):
+                    ShowMessage(
+                        window, 
+                        'Donées existante', 
+                        'Données déja existe dans la base de données!', 
+                        DARK_MODE if is_dark_mode else LIGHT_MODE,
+                        FONT,
+                    )
                     return
                 
                 contact['nom'] = nouveau_nom
@@ -101,7 +140,13 @@ def modifier():
                 break
         
     if not found:
-        print('NON EXISTANT')
+        ShowMessage(
+            window, 
+            'Donée non existante', 
+            'ce nom n\'existe pas dans la base de données!', 
+            DARK_MODE if is_dark_mode else LIGHT_MODE,
+            FONT,
+        )
         return
         
     with open('data.csv', 'w', newline='') as f:
@@ -114,7 +159,13 @@ def supprimer():
     nom_contact_supprimer = nom_contact_supprimer_entry.get()
     
     if not nom_contact_supprimer:
-        print('invalid data')
+        ShowMessage(
+                    window, 
+                    'Donées invalides', 
+                    'Ce champ doit être non vide!', 
+                    DARK_MODE if is_dark_mode else LIGHT_MODE,
+                    FONT,
+                    )
         return
     
     found = False
@@ -132,7 +183,13 @@ def supprimer():
                 break
     
     if not found:
-        print('NON EXISTANT')
+        ShowMessage(
+            window, 
+            'Donée non existante', 
+            'ce nom n\'existe pas dans la base de données!', 
+            DARK_MODE if is_dark_mode else LIGHT_MODE,
+            FONT,
+        )
         return
     
     with open('data.csv', 'w', newline='') as f:
@@ -145,7 +202,13 @@ def afficher():
     nom_contact_afficher = nom_contact_afficher_entry.get()
     
     if not nom_contact_afficher:
-        print('invalid data')
+        ShowMessage(
+            window, 
+            'Donée invalide', 
+            'Ce champ doit être non valide!', 
+            DARK_MODE if is_dark_mode else LIGHT_MODE,
+            FONT,
+        )
         return
     
     found = False
@@ -167,7 +230,13 @@ def afficher():
                 break
     
     if not found:
-        print('NON EXISTANT')
+        ShowMessage(
+            window, 
+            'Donée non existante', 
+            'Données n\'existe pas dans la base de données!', 
+            DARK_MODE if is_dark_mode else LIGHT_MODE,
+            FONT,
+        )
 
 
 def vider_annuaire():
@@ -221,11 +290,8 @@ def switch_theme():
     
     for widget1 in window.winfo_children():
         widget1.config(bg=theme['bg'])
-        print(widget1.winfo_class())
         for widget2 in widget1.winfo_children():
             widget_type = widget2.winfo_class()
-            
-            # print(widget_type)
             
             if widget_type == 'Label':
                 widget2.config(bg=theme['bg'], fg=theme['fg'])
@@ -237,6 +303,7 @@ def switch_theme():
                 widget2.config(bg=theme['bg'], fg=theme['fg'])
 
 
+# Global variables
 is_dark_mode = False
 
 
