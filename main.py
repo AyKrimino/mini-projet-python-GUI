@@ -17,6 +17,10 @@ def is_valid(nom=None, mail=None, tel=None):
     if valid and mail:
         if '@' not in mail:
             return False
+        '''
+        test@isi.utm.tn
+        ['test', 'isi.utm.tn']
+        '''
         mail = mail.split('@')
         nom_mail = mail[0]
         part2_mail = mail[1]
@@ -37,7 +41,7 @@ def exist(nom=None, mail=None, tel=None):
     file_is_emty = 'yes'
     
     with open('data.csv') as f:
-        contacts_reader = csv.DictReader(f)
+        contacts_reader = csv.DictReader(f, fieldnames=FIELDNAMES)
         
         for contact in contacts_reader:
             file_is_emty = 'no'
@@ -46,13 +50,6 @@ def exist(nom=None, mail=None, tel=None):
                 (mail and contact['email'] == mail) or 
                 (tel and contact['telephone'] == tel)
             ):
-                ShowMessage(
-                    window, 
-                    'Donées existante', 
-                    'Données déja existe dans la base de données!', 
-                    DARK_MODE if is_dark_mode else LIGHT_MODE,
-                    FONT,
-                )
                 return True, file_is_emty
     return False, file_is_emty
     
@@ -105,6 +102,14 @@ def ajouter():
             contact_writer.writeheader()
         
         contact_writer.writerow({'nom': nom, 'email':mail, 'telephone': tel})
+        
+    ShowMessage(
+        window,
+        'Succés',
+        'donnée ajoutée avec succés!',
+        DARK_MODE if is_dark_mode else LIGHT_MODE,
+        FONT,
+    )
 
 
 def modifier():
@@ -160,6 +165,14 @@ def modifier():
         contacts_writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
         
         contacts_writer.writerows(contacts)
+        
+    ShowMessage(
+        window,
+        'Succés',
+        'donnée modifiée avec succés!',
+        DARK_MODE if is_dark_mode else LIGHT_MODE,
+        FONT,
+    )
                 
 
 def supprimer():
@@ -203,6 +216,14 @@ def supprimer():
         contacts_writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
         
         contacts_writer.writerows(contacts)
+    
+    ShowMessage(
+        window,
+        'Donnée supprimée',
+        'Données supprimée avec succés!',
+        DARK_MODE if is_dark_mode else LIGHT_MODE,
+        FONT,
+    )
 
 
 def afficher():
@@ -275,7 +296,6 @@ def reinitialiser_champs():
 def afficher_tous():
     affichage_textbox.config(state='normal')
     affichage_textbox.delete(1.0, 'end')
-    affichage_textbox.config(state='disabled')
 
     with open('data.csv') as f:
         contacts_reader = csv.DictReader(f, fieldnames=FIELDNAMES)
@@ -283,11 +303,10 @@ def afficher_tous():
         contacts_reader.__next__()
         
         for idx, contact in enumerate(contacts_reader):
-            affichage_textbox.config(state='normal')
 
             affichage_textbox.insert(f'{idx + 1}.0', f'Nom : {contact["nom"]}    Mail: {contact["email"]}    Tel: {contact["telephone"]}\n')
             
-            affichage_textbox.config(state='disabled')
+    affichage_textbox.config(state='disabled')
 
 
 def switch_theme():
@@ -378,7 +397,7 @@ if __name__ == '__main__':
     ajout_contact_label.grid(
         padx=10,
         pady=5,
-        sticky='news',
+        sticky='new',
         row=1, 
         column=0,
     )
