@@ -17,8 +17,7 @@ class CustomMessageBox(tk.Toplevel):
             bg=self.theme['bg'],
             fg=self.theme['fg'],
             font=font,
-        )
-        
+        ) 
         self.label.pack(pady=20, padx=20)
         
         self.ok_button = tk.Button(

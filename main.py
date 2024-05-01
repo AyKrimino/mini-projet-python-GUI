@@ -8,6 +8,27 @@ from custom_components import CustomMessageBox as ShowMessage
 
 
 def is_valid(nom=None, mail=None, tel=None):
+    '''
+    Determines the validity of input data for a person's name, email, and telephone number.
+
+    Args:
+        nom (str, optional): The person's name. Defaults to None.
+        mail (str, optional): The person's email address. Defaults to None.
+        tel (str, optional): The person's telephone number. Defaults to None.
+
+    Returns:
+        bool: True if all input data is valid, False otherwise.
+
+    The function checks the validity of input data for a person's name, email, and telephone number
+    based on certain criteria:
+    - For the name (nom): It must consist of alphanumeric characters and be no longer than 30 characters.
+    - For the email (mail): It must contain an '@' symbol and must be in the format 'username@domain' where
+      the domain is 'isi.utm.tn'. The username part must consist of alphanumeric characters only, no spaces.
+    - For the telephone number (tel): It must be exactly 6 digits and consist only of numeric characters.
+
+    If any of the input data fails to meet its respective criteria, the function returns False indicating
+    invalid input. If all input data passes the validation, the function returns True.
+    '''
     valid = True
     if nom:
         valid = (
@@ -38,20 +59,44 @@ def is_valid(nom=None, mail=None, tel=None):
 
 
 def exist(nom=None, mail=None, tel=None):
-    file_is_emty = 'yes'
+    """
+    Checks if a given contact exists in the 'data.csv' file and determines if the file is empty.
+
+    Args:
+        nom (str, optional): The name of the contact. Defaults to None.
+        mail (str, optional): The email of the contact. Defaults to None.
+        tel (str, optional): The telephone number of the contact. Defaults to None.
+
+    Returns:
+        tuple: A tuple containing two values:
+            - bool: True if the contact exists in the file, False otherwise.
+            - str: Indicates if the 'data.csv' file is empty or not. Possible values are 'yes' or 'no'.
+
+    This function reads the 'data.csv' file and checks if a contact with the provided name, email, or telephone
+    number already exists in the file. If any of these values are provided (not None), it searches for an exact match
+    in the respective columns of the CSV file. If a match is found, the function returns a tuple with the first value
+    being True to indicate that the contact exists, along with the status of the file ('no' indicating it's not empty).
+
+    If no match is found or if the file is empty, the function returns a tuple with the first value as False,
+    indicating that the contact does not exist, along with the status of the file ('yes' indicating it's empty).
+
+    Note: The CSV file must have column headers corresponding to 'nom', 'email', and 'telephone' for this function
+    to work properly.
+    """
+    file_is_empty = 'yes'
     
     with open('data.csv') as f:
         contacts_reader = csv.DictReader(f, fieldnames=FIELDNAMES)
         
         for contact in contacts_reader:
-            file_is_emty = 'no'
+            file_is_empty = 'no'
             if (
                 (nom and contact['nom'] == nom) or 
                 (mail and contact['email'] == mail) or 
                 (tel and contact['telephone'] == tel)
             ):
-                return True, file_is_emty
-    return False, file_is_emty
+                return True, file_is_empty
+    return False, file_is_empty
     
 
 def ajouter():
@@ -137,7 +182,9 @@ def modifier():
                     )
                     return
                 
-                if exist(nouveau_nom, nouveau_mail):
+                existe = exist(nouveau_nom, nouveau_mail)[0]
+                
+                if existe:
                     ShowMessage(
                         window, 
                         'Donées existante', 
@@ -233,7 +280,7 @@ def afficher():
         ShowMessage(
             window, 
             'Donée invalide', 
-            'Ce champ doit être non valide!', 
+            'Ce champ doit être non vide!', 
             DARK_MODE if is_dark_mode else LIGHT_MODE,
             FONT,
         )
