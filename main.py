@@ -59,7 +59,7 @@ def is_valid(nom=None, mail=None, tel=None):
 
 
 def exist(nom=None, mail=None, tel=None):
-    """
+    '''
     Checks if a given contact exists in the 'data.csv' file and determines if the file is empty.
 
     Args:
@@ -82,7 +82,7 @@ def exist(nom=None, mail=None, tel=None):
 
     Note: The CSV file must have column headers corresponding to 'nom', 'email', and 'telephone' for this function
     to work properly.
-    """
+    '''
     file_is_empty = 'yes'
     
     with open('data.csv') as f:
@@ -357,10 +357,27 @@ def afficher_tous():
 
 
 def switch_theme():
+    '''
+    Toggles between light mode and dark mode for the GUI window and its widgets.
+
+    This function switches the theme of the graphical user interface (GUI) window and its widgets
+    between light mode and dark mode. It maintains a global variable 'is_dark_mode' to track the
+    current mode. When called, it toggles the mode and updates the appearance of the window and
+    its widgets accordingly.
+
+    The function first toggles the 'is_dark_mode' variable to switch between modes. It then determines
+    the appropriate theme based on the current mode. The 'theme' variable holds the colors corresponding
+    to either light mode or dark mode.
+
+    After determining the theme, the function updates the background color of the window and iterates
+    through all the widgets within the window. It adjusts the background and foreground colors of labels,
+    entry fields, text widgets, buttons, and menus according to the selected theme.
+    '''
     global is_dark_mode
     is_dark_mode = not is_dark_mode
     
     theme = LIGHT_MODE
+    switch_theme_button.config(text='Toggle dark mode')
     if is_dark_mode:
         switch_theme_button.config(text='Toggle light mode')
         theme = DARK_MODE
