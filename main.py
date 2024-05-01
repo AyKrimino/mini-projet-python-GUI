@@ -379,24 +379,24 @@ def switch_theme():
     theme = LIGHT_MODE
     switch_theme_button.config(text='Toggle dark mode')
     if is_dark_mode:
-        switch_theme_button.config(text='Toggle light mode')
         theme = DARK_MODE
+        switch_theme_button.config(text='Toggle light mode')
         
     window.config(bg=theme['bg'])
     
-    for widget1 in window.winfo_children():
-        widget1.config(bg=theme['bg'])
-        for widget2 in widget1.winfo_children():
-            widget_type = widget2.winfo_class()
+    for section in window.winfo_children():
+        section.config(bg=theme['bg'])
+        for widget in section.winfo_children():
+            widget_type = widget.winfo_class()
             
             if widget_type == 'Label':
-                widget2.config(bg=theme['bg'], fg=theme['fg'])
+                widget.config(bg=theme['bg'], fg=theme['fg'])
             elif widget_type == 'Entry' or widget_type == 'Text':
-                widget2.config(bg=theme['entry_bg'], fg=theme['entry_fg'], insertbackground=theme['fg'])
+                widget.config(bg=theme['entry_bg'], fg=theme['entry_fg'], insertbackground=theme['fg'])
             elif widget_type == 'Button':
-                widget2.config(bg=theme['btn_bg'], fg=theme['btn_fg'])
+                widget.config(bg=theme['btn_bg'], fg=theme['btn_fg'])
             elif widget_type == 'Menu':
-                widget2.config(bg=theme['bg'], fg=theme['fg'])
+                widget.config(bg=theme['bg'], fg=theme['fg'])
 
 
 # Global variables
@@ -461,7 +461,7 @@ if __name__ == '__main__':
     ajout_contact_label.grid(
         padx=10,
         pady=5,
-        sticky='new',
+        sticky='news',
         row=1, 
         column=0,
     )
